@@ -1,16 +1,19 @@
-import { Injectable, Inject, NotFoundException, ConflictException } from '@nestjs/common';
+import { Injectable, Inject, NotFoundException, ConflictException, UnauthorizedException } from '@nestjs/common';
 import { CreateUserDTO } from "./user.dto";
 import { UserEntity } from "./user.entity";
 import { UserRepository } from "./user.repository"
 import { InjectRepository } from '@nestjs/typeorm';
 import { ProductRepository } from "./../product/product.repository";
 import { getConnection } from 'typeorm';
+import { hashPassword } from 'src/common/utils';
+
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(UserRepository) private userRepository: UserRepository,
     @InjectRepository(ProductRepository) private productRepository: ProductRepository
   ) {}
+
   async getUsers(): Promise<UserEntity[]> {
     return await this.userRepository.find({
       relations: ['products']
@@ -23,7 +26,9 @@ export class UsersService {
   }
   async createUser(user: CreateUserDTO): Promise<UserEntity> {
     const foundUser = await this.userRepository.findOne({email: user.email});
-    if(foundUser) throw new ConflictException("User is exist")
+    if(foundUser) throw new ConflictException("User is exist");
+    user['userType'] = 'client';
+    user.password = hashPassword(user.password);
     const newUser = this.userRepository.create(user);
     await newUser.save();
     return newUser;

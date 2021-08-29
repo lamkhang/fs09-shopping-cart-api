@@ -1,14 +1,19 @@
-import {Controller, Get, Post, Body, Param, Put, Delete} from '@nestjs/common';
+import {Controller, Get, Post, Body, Param, Put, Delete, UseGuards} from '@nestjs/common';
 import { CategorySerivce } from './category.service';
 import { CategoryEntity } from './category.entity';
 import { CreateCategoryDTO } from './category.dto';
 import { ProductEntity } from '../product/product.entity';
+import { JwtAuthGuard } from '../auth/jwtauth.guard';
+import { AuthorizeGuard } from '../auth/authorize.guard';
+
+@UseGuards(JwtAuthGuard)
+// @UseGuards(AuthorizeGuard)
 @Controller('/categories')
 export class CategoryController {
   constructor(
     private categoryService : CategorySerivce
   ) {}
-  @Get('/') 
+  @Get('/')
   async getCategories(): Promise<CategoryEntity[]> {
     return await this.categoryService.getCategories();
   }

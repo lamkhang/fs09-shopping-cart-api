@@ -12,6 +12,8 @@ export class CreateUserDTO {
   })
   password: string;
 
+  userType: string;
+
   @IsNotEmpty()
   fullName: string;
 }

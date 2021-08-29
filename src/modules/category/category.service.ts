@@ -9,7 +9,7 @@ import { ProductRepository } from "../product/product.repository";
 import { ProductEntity } from "../product/product.entity";
 @Injectable()
 export class CategorySerivce {
-  constructor( 
+  constructor(
     @InjectRepository(CategoryRepository) private categoryRepository: CategoryRepository,
     @InjectRepository(ProductRepository) private productRepository: ProductRepository
    ) {}
@@ -44,6 +44,7 @@ export class CategorySerivce {
     // await categories.save();
   }
   async getProductsByCategoryId(id: number): Promise<ProductEntity[]> {
+    console.log(id)
     return await this.productRepository.find({
       categoryId: id
     })

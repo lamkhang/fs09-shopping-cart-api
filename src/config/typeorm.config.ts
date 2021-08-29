@@ -7,6 +7,6 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
   username: 'root',
   password: 'root',
   entities: [__dirname + "/../modules/**/*.entity.{ts,js}"],  // dinh nghia path tro den models
-  database: 'fs09-shopping-cart',
+  database: 'shoppingcart',
   synchronize: true,
 }

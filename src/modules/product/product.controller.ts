@@ -1,8 +1,10 @@
-import { Controller, Get, Post, Body } from '@nestjs/common';
+import { Controller, Get, Post, Body, UseGuards } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { ProductEntity } from './product.entity';
 import { CreateProductDTO } from './product.dto';
+import { JwtAuthGuard } from '../auth/jwtauth.guard';
 
+@UseGuards(JwtAuthGuard)
 @Controller('/products')
 export class ProductController {
   constructor( private productService: ProductService){}
@@ -19,6 +21,6 @@ export class ProductController {
   @Post('/')
   async createProduct(@Body() data: CreateProductDTO): Promise<ProductEntity> {
     return await this.productService.createProduct(data);
-    
+
   }
 }
